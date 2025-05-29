@@ -3,6 +3,9 @@ pragma solidity ^0.8.0;
 
 import "forge-std/Script.sol";
 import "../src/StakingHelper.sol";
+import {ISuperToken} from "@superfluid-finance/contracts/interfaces/superfluid/ISuperfluid.sol";
+import "forge-std/console.sol";
+import "../src/interfaces/IStakingHelper.sol";
 
 /**
  * @title DeployStakingHelper
@@ -21,23 +24,27 @@ import "../src/StakingHelper.sol";
 contract DeployStakingHelper is Script {
     function run() external {
         uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY");
-        address stakingFactory = vm.envAddress("STAKING_FACTORY_ADDRESS");
         
         vm.startBroadcast(deployerPrivateKey);
         
-        StakingHelper receiver = new StakingHelper(stakingFactory);
-        
-        vm.stopBroadcast();
+        StakingHelper receiver = new StakingHelper();
         
         console.log("StakingHelper deployed at:", address(receiver));
-        console.log("Staking Factory address:", stakingFactory);
 
-        address streme = 0x3b3cd21242ba44e9865b066e5ef5d1cc1030cc58;
-        address stStreme = 0x93419f1c0f73b278c73085c17407794a6580deff;
-        address superInu = 0x063eda1b84ceaf79b8cc4a41658b449e8e1f9eeb;
-        address stSuperInu = 0xc7f2329977339f4ae003373d1acb9717f9d0c6d5;
-        // call storePairs for all of these tokens
-        receiver.storePairs([streme, superInu], [stStreme, stSuperInu]);
+        // Create dynamic arrays with proper checksummed addresses
+        address[] memory tokens = new address[](2);
+        tokens[0] = 0x3B3Cd21242BA44e9865B066e5EF5d1cC1030CC58;
+        tokens[1] = 0x063eDA1b84ceaF79b8cC4a41658b449e8E1F9Eeb;
+
+        address[] memory stakingContracts = new address[](2);
+        stakingContracts[0] = 0x93419F1C0F73b278C73085C17407794A6580dEff;
+        stakingContracts[1] = 0xC7F2329977339F4Ae003373D1ACb9717F9d0c6D5;
+
+        receiver.storePairs(tokens, stakingContracts);
         console.log("StakingHelper updated with pairs for all tokens");
+
+        vm.stopBroadcast();
     }
+
+
 } 
