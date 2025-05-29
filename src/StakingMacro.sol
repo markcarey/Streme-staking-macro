@@ -11,18 +11,29 @@
 */
 
 
-IERC20{
-    balanceOf(address) external view returns (uint256);
+interface IERC20{
+    function balanceOf(address) external view returns (uint256);
 }
 
+contract StakingMacro{
 
 
-ISuperfluidOperations operations = [];
-address stakeHelper =  ;//stakeHelper contr
+    function buildBatchOperations(ISuperfluid host, bytes memory params, address msgSender)
+    external
+    view
+    override
+    returns (ISuperfluid.Operation[] memory operations)
+{
+    (address[] memory tokens, address stakeHelper) =
+        _decodeBatchParams(params);
 
-for(uint i =0; i < tokenList.length; i++){
+    ISuperfluidOperations operations = [];
 
-    operations.push(ISuperfluid.Operation(
-        BatchOperation.OPERATION_TYPE_ERC2771_FORWARD_CALL, forwarder, abi.encode(stakeHelper, msgSender, bytes("0x"))
-    ));
+    for(uint i =0; i < tokens.length; i++){
+        operations.push(ISuperfluid.Operation(
+            BatchOperation.OPERATION_TYPE_ERC2771_FORWARD_CALL, forwarder, abi.encode(stakeHelper, msgSender, bytes("0x"))
+        ));
+    }
+    return operations;
 }
+}   
