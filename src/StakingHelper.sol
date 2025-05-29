@@ -5,7 +5,7 @@ import "@openzeppelin/contracts/token/ERC777/IERC777Recipient.sol";
 import "@openzeppelin/contracts/utils/introspection/IERC1820Registry.sol";
 import "@openzeppelin/contracts/utils/introspection/ERC1820Implementer.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
-
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 interface IStaking {
     function deposit(address to, uint256 amount) external;
 }
@@ -29,13 +29,15 @@ contract StakingHelper is IERC777Recipient, ERC1820Implementer, Ownable {
     /**
      * @dev Constructor that registers this contract as an ERC777 token recipient
      */
-    constructor(address owner) Ownable(owner) {
+    constructor(address owner) {
         // Register this contract as an implementer of ERC777TokensRecipient
         _erc1820.setInterfaceImplementer(
             address(this),
             TOKENS_RECIPIENT_INTERFACE_HASH,
             address(this)
         );
+        
+        transferOwnership(owner);
     }
 
     mapping(address => address) public stakingContracts;

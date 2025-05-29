@@ -2,7 +2,7 @@
 pragma solidity ^0.8.0;
 
 import "forge-std/Script.sol";
-import "../src/ERC777Receiver.sol";
+import "../src/StakingHelper.sol";
 
 /**
  * @title DeployStakingHelper
