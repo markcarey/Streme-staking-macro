@@ -25,7 +25,7 @@ import "forge-std/console.sol";
 contract StakingHelperV2 is IERC777Recipient, ERC1820Implementer, Ownable {
     IERC1820Registry private _erc1820 = IERC1820Registry(0x1820a4B7618BdE71Dce8cdc73aAB6C95905faD24);
     
-    IStakingFactory stakingFactory = IStakingFactory(0x293A5d47f5D76244b715ce0D0e759E0227349486);
+    IStakingFactory stakingFactory = IStakingFactory(0xe60a32Cc8A0c7b354Fb6938f1B277fFe7C07e6a9);
     // Interface hash for ERC777TokensRecipient
     bytes32 private constant TOKENS_RECIPIENT_INTERFACE_HASH = keccak256("ERC777TokensRecipient");
     
